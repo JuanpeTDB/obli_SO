@@ -14,13 +14,14 @@ else
     echo "Usuario y/o contrasenia incorrecta"
     opc=n
     while [ $opc != "s" ]; do
-        read -p "Desea volver para atras? [s/n]" opc
+        read -p "Deseas volver a intentarlo? [s/n]" opc
         case $opc in
-            "s") break;;
-            "n") ./scripts/ingresar.sh
+            "s") ./scripts/ingresar.sh
+            break;;
+            "n") ./login.sh
             break;;
             *) echo "Ingrese una opcion valida"
-            break;;
+            echo " ";;
         esac
     done
 fi
