@@ -1,5 +1,5 @@
 #!/bin/bash
-./login.sh
+./scripts/login.sh
 op=0;
 while [ $op -ne 6 ]; do
     echo "1) Cambiar Contrasenia"
@@ -10,11 +10,11 @@ while [ $op -ne 6 ]; do
     echo "6) Salir"
     read -p "Ingrese una opcion: " op
     case $op in
-        "1") ./cambiarPass.sh;;
-        "2") ./ingresarProd.sh;;
-        "3") ./vender.sh;;
-        "4") ./filtrarProd.sh;;
-        "5") ./crearReporte.sh;;
+        "1") ./scripts/cambiarPass.sh;;
+        "2") ./scripts/ingresarProd.sh;;
+        "3") ./scripts/vender.sh;;
+        "4") ./scripts/filtrarProd.sh;;
+        "5") ./scripts/crearReporte.sh;;
         "6") break;;
         *) echo "Ingrese una opcion valida"
         echo " "
