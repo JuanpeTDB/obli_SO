@@ -1,9 +1,10 @@
 #!/bin/bash
+clear
 echo " "
 opc=n
 while [ $opc != "s" ]; do
     read -p "Ingrese un nombre de usuario: " usu
-    cantUsu=`cat docs/usuarios.txt | cut -d';' -f1 | grep "$usu" | wc -l`
+    cantUsu=`cat docs/usuarios.txt | cut -d';' -f1 | grep "$usu" | wc -l`       #Cuenta las lineas que contienen usu
     if [ $cantUsu -eq "1" ];then 
         echo " "
         echo "Usuario $usu ya existente"

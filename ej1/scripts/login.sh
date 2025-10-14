@@ -1,4 +1,5 @@
 #!/bin/bash
+echo " "
 echo "Bienvenido a Citadel"
 echo "Ingrese el numero de lo que desea hacer: "
 while true; do

@@ -1,5 +1,8 @@
 #!/bin/bash
+clear
 ./scripts/login.sh
+clear
+echo " "
 op=0;
 while [ $op -ne 6 ]; do
     echo "1) Cambiar Contrasenia"
