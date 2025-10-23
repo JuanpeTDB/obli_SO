@@ -1,1 +1,6 @@
-con - constu - alalala - pintura - 50 - $ 200
+con - constu - aaaaa - pintura - 15 - $ 100
+def - alfombra - sssss - pintura - 10 - $ 200
+wer - cocina - dddd - pintura - 25 - $ 300
+sdf - ventna - fffff - pintura - 50 - $ 400
+hth - banio - vvvvv - pintura - 40 - $ 500
+POT - Pintura - Alemana - Pintura de extreiories - 40 - $ 350

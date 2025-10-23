@@ -1,4 +1,1 @@
-jp;jp
-nachito;nachito 
- 
-admin;admin2
+admin;admin
