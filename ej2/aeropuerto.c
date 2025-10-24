@@ -41,8 +41,7 @@ int rand_1_3(void) {
     return 1 + (r % 3);
 }
 
-void* pasajero(void* arg){
-    srand((unsigned)time(NULL));  
+void* pasajero(void* arg){ 
     int tiempo = rand_1_3();
     int id = (int)(intptr_t)arg;
     printf("Pasajero %d esta mirando el cartel... \n", id);
@@ -50,8 +49,7 @@ void* pasajero(void* arg){
     pthread_exit(0);
 }
 
-void* oficinista(void* arg){
-    srand((unsigned)time(NULL));    
+void* oficinista(void* arg){  
     int tiempo = rand_1_5();
     int id = (int)(intptr_t)arg;
     printf("Oficinista %d esta cambiando el cartel... \n", id);
@@ -61,7 +59,7 @@ void* oficinista(void* arg){
 }
 
 int main(){
-    srand((unsigned)time(NULL) ^ (unsigned)getpid()); 
+    srand((unsigned)time(NULL));
     int quienVa = 0;
     int pas=1;
     int ofi=1;
