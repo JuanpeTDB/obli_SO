@@ -1,45 +1,55 @@
-#include <stdio.h>
-#include <unistd.h>
+#include <stdio.h> 
+#include <unistd.h> 
 #include <pthread.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdint.h>
+#include <sys/types.h> 
+#include <stdlib.h> 
+#include <time.h> 
+#include <stdint.h> 
+#include <semaphore.h> 
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+sem_t mutex; 
 
-int rand_1_5(void){ unsigned limit = RAND_MAX - (RAND_MAX + 1u) % 5; unsigned r; do { r = (unsigned)rand(); } while (r > limit); return 1 + (r % 5); }
-int rand_1_3(void){ unsigned limit = RAND_MAX - (RAND_MAX + 1u) % 3; unsigned r; do { r = (unsigned)rand(); } while (r > limit); return 1 + (r % 3); }
+// Funcion que genera un numero random entre 1 y 5, hecha con chatgpt 
+int rand_1_5(void) { unsigned limit = RAND_MAX - (RAND_MAX + 1u) % 5; unsigned r; do { r = (unsigned)rand(); } while (r > limit); return 1 + (r % 5); } 
 
-void* pasajero(void* arg){
-    int id = (int)(intptr_t)arg;
-    pthread_mutex_lock(&mutex);
-    printf("Pasajero %d esta mirando el cartel...\n", id);
-    sleep(rand_1_3());
-    pthread_mutex_unlock(&mutex);
-    return NULL;
-}
+// Funcion que genera un numero random entre 1 y 3, hecha con chatgpt 
+int rand_1_3(void) { unsigned limit = RAND_MAX - (RAND_MAX + 1u) % 3; unsigned r; do { r = (unsigned)rand(); } while (r > limit); return 1 + (r % 3); } 
 
-void* oficinista(void* arg){
-    int id = (int)(intptr_t)arg;
-    for (int i = 1; i <= 3; i++) {
-        pthread_mutex_lock(&mutex);
-        printf("Oficinista %d esta cambiando el cartel en iteracion %d...\n", id, i);
-        sleep(rand_1_5());
-        pthread_mutex_unlock(&mutex);
-    }
-    return NULL;
-}
+void* pasajero(void* arg){ 
+    int id = (int)(intptr_t)arg; 
+    sleep(rand() % 5 + 2); //R: Podes definir una funcion para sacar randoms como antes, lo unico que le agregue fue un sleep antes de ejecutar, asi no se dispara de una.
+    sem_wait(&mutex); 
+    printf("Pasajero %d esta mirando el cartel...\n", id); 
+    sleep(rand_1_3()); //R: dejo este tamb, asi demora mas en terminar el thread.
+    sem_post(&mutex); 
+    return NULL; 
+} 
 
-int main(void){
-    srand((unsigned)time(NULL));
-    pthread_t ofi[5], pas[100];
+void* oficinista(void* arg){ 
+    int id = (int)(intptr_t)arg; 
+    sleep(rand() % 3 + 1); //R: Tambien fuerzo a que demore, asi evitamos que se disparen todos de una al inicio.
+    for (int i = 1; i <= 3; i++) { 
+        sem_wait(&mutex); 
+        printf("Oficinista %d esta cambiando el cartel en iteracion %d...\n", id, i); 
+        sleep(rand_1_5()); //R: Lo saque para afuera, asi el oficinista queda esperando..
+        sem_post(&mutex); 
+    } 
+    return NULL; 
+} 
 
+int main(){ 
+    srand((unsigned)time(NULL)); 
+    sem_init(&mutex, 0, 1); 
+    pthread_t ofi[5];
+    pthread_t pas[100]; 
+    // Crear oficinistas 
     for (int i = 0; i < 5; i++) pthread_create(&ofi[i], NULL, oficinista, (void*)(intptr_t)(i + 1));
-    for (int i = 0; i < 100; i++) pthread_create(&pas[i], NULL, pasajero, (void*)(intptr_t)(i + 1));
-
-    for (int i = 0; i < 5; i++) pthread_join(ofi[i], NULL);
+    // Crear pasajeros 
+    for (int i = 0; i < 100; i++) pthread_create(&pas[i], NULL, pasajero, (void*)(intptr_t)(i + 1)); 
+    
+    for (int i = 0; i < 5; i++) pthread_join(ofi[i], NULL); 
     for (int i = 0; i < 100; i++) pthread_join(pas[i], NULL);
 
-    return 0;
+    sem_destroy(&mutex);
+    return 0; 
 }
