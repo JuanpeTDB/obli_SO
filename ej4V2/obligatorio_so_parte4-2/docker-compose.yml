@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  web1:
+    build: ./web
+    container_name: tareas-web1
+    environment:
+      - REDIS_HOST=redis
+    networks:
+      - tareas-net
+
+  web2:
+    build: ./web
+    container_name: tareas-web2
+    environment:
+      - REDIS_HOST=redis
+    networks:
+      - tareas-net
+
+  redis:
+    image: redis:alpine
+    container_name: tareas-redis
+    volumes:
+      - redis-data:/data
+    networks:
+      - tareas-net
+
+  nginx:
+    build: ./nginx
+    container_name: tareas-nginx
+    ports:
+      - "3000:80"  # Entramos siempre por Nginx
+    depends_on:
+      - web1
+      - web2
+    networks:
+      - tareas-net
+
+networks:
+  tareas-net:
+
+volumes:
+  redis-data:
